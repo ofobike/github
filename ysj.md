@@ -176,7 +176,7 @@ ORDER BY g.score DESC ;
 | Department | Emplyoee | Salary |     |
 | ---------- | -------- | ------ | --- |
 | IT         | Max      | 90000  |     |
-| Sales      | Henry    |        |     |
+| Sales      | Henry    |  80000      |     |
 
 
 第一步:先查询出每个部门的最高工资
