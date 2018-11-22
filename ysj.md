@@ -153,6 +153,8 @@ ORDER BY g.score DESC ;
 
 ### 数据库面试题(6)
 ==给定数据结构如下表: #f44336==
+要求：
+编写一个 SQL 查询，找出每个部门工资最高的员工。例如，根据上述给定的表格，Max 在 IT 部门有最高工资，Henry 在 Sales 部门有最高工资
 ==部门表: #4caf50==
 
 | id  | name |
@@ -169,17 +171,52 @@ ORDER BY g.score DESC ;
 | 3   | Max    | 90000  |        2      |
 | 4   | Jim    |    60000    |      1        |
 
-==要求查询每个部门的最高工资：==
+==编写一个 SQL 查询，找出每个部门工资最高的员工。例如，根据上述给定的表格，Max 在 IT 部门有最高工资，Henry 在 Sales 部门有最高工资：==
 
-|     |     |
-| --- | --- |
-|     |     |
-|     |     |
-|     |     |
-|     |     |
-|     |     |
-|     |     |
-|     |     |
+| Department | Emplyoee | Salary |     |
+| ---------- | -------- | ------ | --- |
+| IT         | Max      | 90000  |     |
+| Sales      | Henry    |        |     |
+
+
+第一步:先查询出每个部门的最高工资
+```sql
+SELECT 
+    MAX(ysj_emplyee.`salary`) AS salary,
+    ysj_department.`name` AS NAME 
+  FROM
+    ysj_department 
+    LEFT JOIN ysj_emplyee 
+      ON ysj_department.`id` = ysj_emplyee.`departmentId` 
+  GROUP BY ysj_department.`name`;
+  ```
+ **上一句sql语句出现的结果是:**
+| salary | name | 
+| ------ | ---- | 
+| 90000  | IT   |     
+| 80000  |  Sales    |
+把这个sql语句查询的结果当成一个表，在三个表一起查询
+```sql
+SELECT 
+  a.`name`,
+  b.`name`,
+  b.`salary`
+FROM
+  ysj_department a,
+  ysj_emplyee b,
+  (SELECT 
+    MAX(ysj_emplyee.`salary`) AS salary,
+    ysj_department.`name` AS NAME 
+  FROM
+    ysj_department 
+    LEFT JOIN ysj_emplyee 
+      ON ysj_department.`id` = ysj_emplyee.`departmentId` 
+  GROUP BY ysj_department.`name`) AS c 
+WHERE a.`id` = b.`departmentId` 
+  AND b.`salary` = c.salary ;
+```
+
+
 
 
 
